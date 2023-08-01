@@ -88,16 +88,28 @@
 //-----------------------------------------------------------------------------
 var MyParameters = PluginManager.parameters('TitleImageSwitcher');
 //-----------------------------------------------------------------------------
+//初始化fs
+//-----------------------------------------------------------------------------
+const fs = require('fs');//导入fs模块
+const data = {
+        Stage: "1"
+};//要保存的json数据
+const filePath = 'www/data/GameStage.json';//要保存的文件名和路径
+const jsonString = JSON.stringify(data);//将数据转换为json字符串
+//判断GameStage.json是否存在
+if(fs.existsSync('www/data/GameStage.json') == false){
+    fs.writeFile(filePath, jsonString);//GameStage.json不存在则保存json文件
+    SceneManager.goto(Scene_Boot);
+}
+//-----------------------------------------------------------------------------
 //游戏内切换周目插件指令
 //-----------------------------------------------------------------------------
 Game_Interpreter.prototype.pluginCommand = function(command, args){
     if(command == "switchGameStage"){
         var gameStage = args[0];//获取输入的参数
-        const fs = require('fs');//导入fs模块
         const data = {
             Stage: gameStage
         };//要保存的json数据
-        const filePath = 'www/data/GameStage.json';//要保存的文件名和路径
         const jsonString = JSON.stringify(data);//将数据转换为json字符串
         fs.writeFile(filePath, jsonString);//保存json文件
     }
