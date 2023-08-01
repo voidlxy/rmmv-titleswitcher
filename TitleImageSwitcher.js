@@ -87,6 +87,7 @@
 //读取插件参数
 //-----------------------------------------------------------------------------
 var MyParameters = PluginManager.parameters('TitleImageSwitcher');
+var costti = JSON.parse(MyParameters.CustomizedSettings);
 //-----------------------------------------------------------------------------
 //初始化fs
 //-----------------------------------------------------------------------------
@@ -99,6 +100,11 @@ const jsonString = JSON.stringify(data);//将数据转换为json字符串
 //判断GameStage.json是否存在
 if(fs.existsSync('www/data/GameStage.json') == false){
     fs.writeFile(filePath, jsonString);//GameStage.json不存在则保存json文件
+    SceneManager.goto(Scene_Boot);
+}
+//判断CTIS.json是否存在
+if(fs.existsSync('www/data/CTIS.json') == false){
+    fs.writeFile('www/data/CTIS.json', "[" + costti + "]");//CTIS.json不存在则保存json文件
     SceneManager.goto(Scene_Boot);
 }
 //-----------------------------------------------------------------------------
@@ -115,11 +121,13 @@ Game_Interpreter.prototype.pluginCommand = function(command, args){
     }
 }
 //-----------------------------------------------------------------------------
-//将周目数添加到DataManager
+//将周目数和定制数据添加到DataManager
 //-----------------------------------------------------------------------------
 var $gameStage       = null;
+var $costTitle       = null;
 DataManager._databaseFiles = [
     { name: '$gameStage',        src: 'GameStage.json'    },
+    { name: '$costTitle',        src: 'CTIS.json'         },
     { name: '$dataActors',       src: 'Actors.json'       },
     { name: '$dataClasses',      src: 'Classes.json'      },
     { name: '$dataSkills',       src: 'Skills.json'       },
@@ -149,6 +157,12 @@ Scene_Title.prototype.createBackground = function() {
             this._backSprite1 = new Sprite(ImageManager.loadTitle1(MyParameters.MT1));
             this._backSprite2 = new Sprite(ImageManager.loadTitle2(MyParameters.ST1));
         }
+    }else{
+        //定制模式开启，从CTIS.json加载标题
+        var gmstg = $gameStage.Stage;
+        gmstg = gmstg - 1;
+        this._backSprite1 = new Sprite(ImageManager.loadTitle1($costTitle[gmstg].MT));
+        this._backSprite2 = new Sprite(ImageManager.loadTitle2($costTitle[gmstg].ST));
     }
     this.addChild(this._backSprite1);
     this.addChild(this._backSprite2);
@@ -165,6 +179,12 @@ Scene_Title.prototype.playTitleMusic = function() {
             $dataSystem.titleBgm.name = MyParameters.BGM1
             AudioManager.playBgm($dataSystem.titleBgm);
         }
+    }else{
+        //定制模式开启，从CTIS.json加载音乐
+        var gmstg = $gameStage.Stage;
+        gmstg = gmstg - 1;
+        $dataSystem.titleBgm.name = $costTitle[gmstg].BGM
+        AudioManager.playBgm($dataSystem.titleBgm);
     }
     AudioManager.stopBgs();
     AudioManager.stopMe();
