@@ -102,14 +102,12 @@ const data = {
 };//要保存的json数据
 const filePath = 'www/data/GameStage.json';//要保存的文件名和路径
 const jsonString = JSON.stringify(data);//将数据转换为json字符串
+//初始化CTIS.json
+fs.writeFile('www/data/CTIS.json', "[" + costti + "]");//CTIS.json不存在则保存json文件
+SceneManager.goto(Scene_Boot);
 //判断GameStage.json是否存在
 if(fs.existsSync('www/data/GameStage.json') == false){
     fs.writeFile(filePath, jsonString);//GameStage.json不存在则保存json文件
-    SceneManager.goto(Scene_Boot);
-}
-//判断CTIS.json是否存在
-if(fs.existsSync('www/data/CTIS.json') == false){
-    fs.writeFile('www/data/CTIS.json', "[" + costti + "]");//CTIS.json不存在则保存json文件
     SceneManager.goto(Scene_Boot);
 }
 //-----------------------------------------------------------------------------
