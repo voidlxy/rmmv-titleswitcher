@@ -32,6 +32,11 @@
  * @desc 二周目标题背景音乐
  * @default Theme6
  * 
+ * @param MacOsMode
+ * @desc 开启Mac适配
+ * @default false
+ * @type boolean
+ * 
  * @param Customized
  * @desc 开启定制模式(若不开启，则为一般模式)
  * @default false
