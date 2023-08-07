@@ -107,7 +107,7 @@ const data = {
 };//要保存的json数据
 const filePath = 'www/data/GameStage.json';//要保存的文件名和路径
 const ctisPath = 'www/data/CTIS.json';
-if(MyParameters.MacOsMode == true){
+if(MyParameters.MacOsMode == 'true'){
     filePath = 'data/GameStage.json';
     ctisPath = 'data/CTIS.json';
 };
